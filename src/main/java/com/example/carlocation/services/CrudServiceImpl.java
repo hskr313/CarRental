@@ -1,10 +1,13 @@
 package com.example.carlocation.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public abstract class CrudServiceImpl<Repository extends JpaRepository,
         TEntity,
@@ -23,8 +26,8 @@ public abstract class CrudServiceImpl<Repository extends JpaRepository,
     }
 
     @Override
-    public List<TEntity> readAll() {
-        return this.repository.findAll();
+    public Stream<TEntity> readAll() {
+        return this.repository.findAll().stream();
     }
 
     @Override

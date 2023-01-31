@@ -5,13 +5,14 @@ import org.springframework.stereotype.Service;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
-@Service
+
 public interface CrudService<TEntity, TKey extends Serializable>{
 
     TEntity save(TEntity entity);
 
-    List<TEntity> readAll();
+    Stream<TEntity> readAll();
 
     Optional<TEntity> readOneByKey(TKey id);
 

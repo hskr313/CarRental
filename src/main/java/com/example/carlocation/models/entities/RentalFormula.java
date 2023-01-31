@@ -20,7 +20,7 @@ public class RentalFormula extends BaseEntity<Long> {
     private Long maxKm;
 
     @Embeddable
-    private enum Formula{
+    public enum Formula{
 
         DAY_RENT,
         WEEK_RENT,

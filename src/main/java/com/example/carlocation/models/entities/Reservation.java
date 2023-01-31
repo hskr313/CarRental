@@ -21,7 +21,6 @@ public class Reservation extends BaseEntity<Long>{
     private String reservStatus;
 
     @OneToOne
-    @Column(unique = true)
     private Reservation substitution;
 
     @OneToOne(mappedBy = "reservation")
