@@ -1,5 +1,6 @@
 package com.example.carlocation.models.dtos.option;
 
+import com.example.carlocation.models.entities.Option;
 import lombok.Builder;
 import lombok.Data;
 
@@ -7,8 +8,15 @@ import lombok.Data;
 @Builder
 public class OptionDTO {
 
-    private Long id;
+    private Integer id;
 
     private String optionName;
+
+    public static OptionDTO toDTO(Option option){
+        return OptionDTO.builder()
+                .id(option.getId())
+                .optionName(option.getOptionName())
+                .build();
+    }
 
 }

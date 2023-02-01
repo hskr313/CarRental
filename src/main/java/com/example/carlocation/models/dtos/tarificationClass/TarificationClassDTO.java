@@ -2,6 +2,7 @@ package com.example.carlocation.models.dtos.tarificationClass;
 
 import com.example.carlocation.models.dtos.insuranceContract.InsuranceContractDTO;
 import com.example.carlocation.models.dtos.model.ModelDTO;
+import com.example.carlocation.models.entities.TarificationClass;
 import lombok.Builder;
 import lombok.Data;
 
@@ -20,4 +21,17 @@ public class TarificationClassDTO {
 
     private List<InsuranceContractDTO> contractList;
 
+    public static TarificationClassDTO toDTO(TarificationClass tarificationClass){
+        return TarificationClassDTO.builder()
+                .id(tarificationClass.getId())
+                .price_km(tarificationClass.getPrice_km())
+                .fine_day(tarificationClass.getFine_day())
+                .models(tarificationClass.getModels().stream()
+                        .map(ModelDTO::toDTO)
+                        .toList())
+                .contractList(tarificationClass.getContractList().stream()
+                        .map(InsuranceContractDTO::toDTO)
+                        .toList())
+                .build();
+    }
 }
