@@ -4,12 +4,16 @@ import com.example.carlocation.models.dtos.client.ClientDTO;
 import com.example.carlocation.models.dtos.rental.RentalDTO;
 
 import com.example.carlocation.models.entities.Reservation;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ReservationDTO {
 
     private Long id;
@@ -27,6 +31,7 @@ public class ReservationDTO {
     private ClientDTO client;
 
     public static ReservationDTO toDTO(Reservation reservation){
+        if (reservation == null) return null;
         return ReservationDTO.builder()
                 .id(reservation.getId())
                 .removal(reservation.getRemoval())

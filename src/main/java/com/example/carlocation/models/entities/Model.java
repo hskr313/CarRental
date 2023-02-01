@@ -9,10 +9,14 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 public class Model extends RelationalEntity<Model.ModelId>{
+
+    @EmbeddedId
+    private ModelId id;
 
     @ManyToMany(targetEntity = Option.class)
     private List<Option> options;

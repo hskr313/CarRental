@@ -2,14 +2,17 @@ package com.example.carlocation.models.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Getter
 @Setter
 public class Car extends BaseEntity<Long> {
@@ -27,12 +30,12 @@ public class Car extends BaseEntity<Long> {
 
     private LocalDate returnDate;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @MapsId("modelId")
     private Model model;
 
     @OneToMany
-    private List<Reservation> reservations;
+    private List<Reservation> reservations = new ArrayList<>();
 
     //TODO demander si je dois redefinir mon setter pour la date
 }

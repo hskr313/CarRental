@@ -8,3 +8,6 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  webflux:
+    format:
+      date: dd/MM/yyyy

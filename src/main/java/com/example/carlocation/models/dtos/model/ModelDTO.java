@@ -24,6 +24,7 @@ public class ModelDTO {
     private List<OptionDTO> options;
 
     public static ModelDTO toDTO(Model model){
+        if (model == null) return null;
         return ModelDTO.builder()
                 .brand(model.getId().getBrand())
                 .type(model.getId().getType())

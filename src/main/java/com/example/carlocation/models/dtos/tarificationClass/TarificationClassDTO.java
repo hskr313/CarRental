@@ -22,6 +22,7 @@ public class TarificationClassDTO {
     private List<InsuranceContractDTO> contractList;
 
     public static TarificationClassDTO toDTO(TarificationClass tarificationClass){
+        if (tarificationClass == null) return null;
         return TarificationClassDTO.builder()
                 .id(tarificationClass.getId())
                 .price_km(tarificationClass.getPrice_km())
