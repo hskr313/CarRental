@@ -13,6 +13,7 @@ public class OptionDTO {
     private String optionName;
 
     public static OptionDTO toDTO(Option option){
+        if ( option == null) return null;
         return OptionDTO.builder()
                 .id(option.getId())
                 .optionName(option.getOptionName())

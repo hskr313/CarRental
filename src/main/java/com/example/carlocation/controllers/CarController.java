@@ -4,7 +4,7 @@ import com.example.carlocation.exceptions.HttpNotFoundException;
 import com.example.carlocation.exceptions.HttpPreconditionFailedException;
 import com.example.carlocation.models.dtos.car.CarDTO;
 import com.example.carlocation.models.entities.Car;
-import com.example.carlocation.models.forms.car.CarAddForm;
+import com.example.carlocation.models.forms.CarAddForm;
 import com.example.carlocation.services.car.CarService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,6 @@ public class CarController implements BaseRestController<CarDTO, Long>{
     @Override
     @GetMapping
     public ResponseEntity<Collection<CarDTO>> readAll() {
-        System.out.println("hello");
         return ResponseEntity.ok(this.carService.readAll()
                 .map(CarDTO::toDTO)
                 .toList());
@@ -43,7 +42,9 @@ public class CarController implements BaseRestController<CarDTO, Long>{
 
     @PostMapping(path = {"/add"})
     public ResponseEntity<CarDTO> addCar( @Valid @RequestBody CarAddForm carAddForm ){
-        System.out.println(carAddForm);
+        if (!carAddForm.isRepair()) {
+            carAddForm.setReturnDate(null);
+        }
         Car car = new Car();
         try {
             car = this.carService.save(carAddForm.toBLL());

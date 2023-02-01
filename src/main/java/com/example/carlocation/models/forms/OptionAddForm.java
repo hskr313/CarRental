@@ -1,4 +1,4 @@
-package com.example.carlocation.models.forms.car;
+package com.example.carlocation.models.forms;
 
 import com.example.carlocation.models.entities.Option;
 import lombok.Builder;

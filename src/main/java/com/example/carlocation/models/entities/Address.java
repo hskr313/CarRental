@@ -6,6 +6,9 @@ import lombok.*;
 
 @Embeddable
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Address {
     @Column(name = "address_street")
     private String street;

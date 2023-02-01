@@ -1,35 +1,34 @@
-package com.example.carlocation.models.forms.car;
+package com.example.carlocation.models.forms;
 
-import com.example.carlocation.models.dtos.model.ModelDTO;
 import com.example.carlocation.models.entities.Car;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Builder
 @Data
 @ToString
 public class CarAddForm {
 
-    // @NotBlank(message = "Must be not blank")
+    @NotBlank(message = "Must be not blank")
     private int buyPrice;
-//    @NotEmpty
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate buyDate;
-//    @PositiveOrZero
+    @PositiveOrZero
     private Long km;
-//    @NotBlank(message = "Must be not blank")
+    @NotBlank(message = "Must be not blank")
     private String supplier;
 
     private boolean repair = false;
 
     private LocalDate returnDate;
-
+    @NotNull
     private ModelAddForm model;
 
     public Car toBLL(){
