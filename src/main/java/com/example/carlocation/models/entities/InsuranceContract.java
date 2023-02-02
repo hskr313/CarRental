@@ -17,4 +17,10 @@ public class InsuranceContract extends BaseEntity<Long> {
     @Column(nullable = false)
     private String typeContract;
 
+    private String insuranceName;
+
+    private String insuranceContact;
+
+    private Address insuranceAddress;
+
 }

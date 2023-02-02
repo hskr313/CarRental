@@ -29,4 +29,6 @@ public class Reservation extends BaseEntity<Long>{
     @ManyToOne
     @MapsId("ClientId")
     private Client client;
+
+    //TODO faire une enumeration pour le status de reservation
 }

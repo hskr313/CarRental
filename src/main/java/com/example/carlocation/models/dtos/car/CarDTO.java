@@ -3,7 +3,6 @@ package com.example.carlocation.models.dtos.car;
 import com.example.carlocation.models.dtos.model.ModelDTO;
 import com.example.carlocation.models.dtos.reservation.ReservationDTO;
 import com.example.carlocation.models.entities.Car;
-import com.example.carlocation.models.entities.Reservation;
 import lombok.Builder;
 import lombok.Data;
 
