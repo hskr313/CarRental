@@ -15,7 +15,7 @@ import java.util.Collection;
 
 @RestController
 @RequestMapping(path = {"/client"})
-public class ClientController {
+public class ClientController implements BaseRestController<ClientDTO, Long>{
 
     private final ClientService clientService;
 

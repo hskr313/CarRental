@@ -30,7 +30,7 @@ public class Car extends BaseEntity<Long> {
 
     private LocalDate returnDate;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST})
     @MapsId("modelId")
     private Model model;
 

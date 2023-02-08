@@ -1,5 +1,7 @@
 package com.example.carlocation.models.forms;
 
+import com.example.carlocation.models.entities.Reservation;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 
@@ -13,7 +15,19 @@ public class ReservationAddForm {
 
     private LocalDate restitution;
 
-    private String reservStatus;
+    private RentalFormulaAddForm rentalFormula;
 
-    private Long idClient;
+    private Long idCar;
+
+    private Long idCustomer;
+
+    private ClientAddForm client;
+
+    public Reservation toBLL(){
+        return Reservation.builder()
+                .removal(removal)
+                .restitution(restitution)
+                .rentalFormula(rentalFormula.toBLL())
+                .build();
+    }
 }

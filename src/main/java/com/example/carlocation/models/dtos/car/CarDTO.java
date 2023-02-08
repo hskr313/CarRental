@@ -1,7 +1,7 @@
 package com.example.carlocation.models.dtos.car;
 
+import com.example.carlocation.models.Period;
 import com.example.carlocation.models.dtos.model.ModelDTO;
-import com.example.carlocation.models.dtos.reservation.ReservationDTO;
 import com.example.carlocation.models.entities.Car;
 import lombok.Builder;
 import lombok.Data;
@@ -30,18 +30,13 @@ public class CarDTO {
 
     private ModelDTO model;
 
-    private List<ReservationDTO> reservations = new ArrayList<>();
+    private List<Period> notAvailable = new ArrayList<>();
 
     public static CarDTO toDTO(Car car){
 
         CarDTOBuilder dto = CarDTO.builder();
 
-        List<ReservationDTO> reservations = new ArrayList<>();
-        if (car.getReservations() != null) {
-            car.getReservations().stream()
-                    .map(ReservationDTO::toDTO)
-                    .forEach(reservations::add);
-        }
+        dto.notAvailable(car.getReservations().stream().map(it -> new Period(it.getRemoval(), it.getRestitution())).toList());
 
         return dto
                 .id(car.getId())
@@ -51,7 +46,6 @@ public class CarDTO {
                 .supplier(car.getSupplier())
                 .repair(car.isRepair())
                 .returnDate(car.getReturnDate())
-                .reservations(reservations)
                 .model(ModelDTO.toDTO(car.getModel()))
                 .build();
 

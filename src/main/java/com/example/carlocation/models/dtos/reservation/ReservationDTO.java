@@ -3,6 +3,8 @@ package com.example.carlocation.models.dtos.reservation;
 import com.example.carlocation.models.dtos.client.ClientDTO;
 import com.example.carlocation.models.dtos.rental.RentalDTO;
 
+import com.example.carlocation.models.dtos.rentalFormula.RentalFormulaDTO;
+import com.example.carlocation.models.entities.RentalFormula;
 import com.example.carlocation.models.entities.Reservation;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,6 +32,11 @@ public class ReservationDTO {
 
     private ClientDTO client;
 
+    private RentalFormulaDTO rentalFormula;
+
+    private int indicativePrice;
+
+
     public static ReservationDTO toDTO(Reservation reservation){
         if (reservation == null) return null;
         return ReservationDTO.builder()
@@ -40,6 +47,7 @@ public class ReservationDTO {
                 .substitution(ReservationDTO.toDTO(reservation.getSubstitution()))
                 .rental(RentalDTO.toDTO(reservation.getRental()))
                 .client(ClientDTO.toDTO(reservation.getClient()))
+                .rentalFormula(RentalFormulaDTO.toDTO(reservation.getRentalFormula()))
                 .build();
     }
 

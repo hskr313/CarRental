@@ -8,6 +8,7 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
@@ -30,5 +31,8 @@ public class Reservation extends BaseEntity<Long>{
     @MapsId("ClientId")
     private Client client;
 
-    //TODO faire une enumeration pour le status de reservation
+    @ManyToOne
+    private RentalFormula rentalFormula;
+
+    //TODO faire une enumeration pour le status de reservation ou une table ?
 }
