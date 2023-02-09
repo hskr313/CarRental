@@ -17,4 +17,8 @@ public class TarificationFormulaDTO {
 
     private TarificationClassDTO tarificationClass;
 
+    public int getLumpSum() {
+        return (int) (rentalFormula.getMaxKm() * tarificationClass.getPrice_km());
+    }
+
 }

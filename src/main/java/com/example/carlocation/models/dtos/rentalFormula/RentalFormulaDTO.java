@@ -15,6 +15,7 @@ public class RentalFormulaDTO {
     private Long maxKm;
 
     public static RentalFormulaDTO toDTO(RentalFormula rentalFormula){
+        if (rentalFormula == null) return null;
         return RentalFormulaDTO.builder()
                 .id(rentalFormula.getId())
                 .rentalType(rentalFormula.getRentalType())

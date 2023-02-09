@@ -6,10 +6,12 @@ import com.example.carlocation.models.dtos.reservation.ReservationDTO;
 import com.example.carlocation.models.entities.Car;
 import com.example.carlocation.models.entities.Client;
 import com.example.carlocation.models.entities.Reservation;
+import com.example.carlocation.models.entities.ReservationStatus;
 import com.example.carlocation.models.forms.ReservationAddForm;
 import com.example.carlocation.services.car.CarService;
 import com.example.carlocation.services.client.ClientService;
 import com.example.carlocation.services.reservation.ReservationService;
+import com.example.carlocation.services.reservation.ReservationServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,21 +23,21 @@ import java.util.Collection;
 @RequestMapping(path = {"/reservation"})
 public class ReservationController implements BaseRestController<ReservationDTO, Long> {
 
-    private final ReservationService reservationService;
+    private final ReservationServiceImpl reservationService;
 
     private final CarService carService;
 
     private final ClientService clientService;
 
-    public ReservationController(ReservationService reservationService, CarService carService, ClientService clientService) {
+    public ReservationController(ReservationServiceImpl reservationService, CarService carService, ClientService clientService) {
         this.reservationService = reservationService;
         this.carService = carService;
         this.clientService = clientService;
     }
 
     @Override
-    @GetMapping(path = {"/id:[0-9]+"})
-    public ResponseEntity<ReservationDTO> readOne(Long id) {
+    @GetMapping(path = "/{id}:[0-9]+")
+    public ResponseEntity<ReservationDTO> readOne(@PathVariable Long id) {
         Reservation reservation = this.reservationService.readOneByKey(id).orElseThrow(() -> new HttpNotFoundException("Reservation with id :(" + id + ") does not exist"));
 
         return ResponseEntity.ok(ReservationDTO.toDTO(reservation));
@@ -49,6 +51,22 @@ public class ReservationController implements BaseRestController<ReservationDTO,
                 .toList());
     }
 
+    @PatchMapping(path = "/{id:[0-9]+}/status")
+    public ResponseEntity<ReservationDTO> changeReservationStatus(@PathVariable Long id, @RequestParam ReservationStatus  status){
+        Reservation reservation = this.reservationService.readOneByKey(id).orElseThrow( () -> new HttpNotFoundException("Reservation with id :(" + id + ") does not exist"));
+
+        switch (status) {
+            case deleted -> reservationService.deletion(reservation);
+            case canceled -> reservationService.cancellation(reservation);
+            case finished -> reservationService.restitution(reservation);
+        }
+        try {
+            this.reservationService.save(reservation);
+        }catch (Exception exception){
+            throw new HttpPreconditionFailedException("Status can't be changed from status A to status B", new ArrayList<>());
+        }
+        return ResponseEntity.ok(ReservationDTO.toDTO(reservation));
+    }
 
 
     @PostMapping(path = "")

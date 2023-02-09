@@ -1,7 +1,10 @@
 package com.example.carlocation.models.dtos.rental;
 
+import com.example.carlocation.models.dtos.car.CarDTO;
 import com.example.carlocation.models.dtos.reservation.ReservationDTO;
+import com.example.carlocation.models.entities.Car;
 import com.example.carlocation.models.entities.Rental;
+import com.example.carlocation.models.entities.TarificationFormula;
 import lombok.Builder;
 import lombok.Data;
 
@@ -17,7 +20,7 @@ public class RentalDTO {
 
     private Long licenseNumber;
 
-    private int deposit;
+    private double deposit;
 
     private LocalDate returnDate;
 
@@ -26,11 +29,11 @@ public class RentalDTO {
     private ReservationDTO reservation;
 
     public static RentalDTO toDTO(Rental rental){
+        if (rental == null) return null;
         return RentalDTO.builder()
                 .id(rental.getId())
                 .startKm(rental.getStartKm())
                 .licenseNumber(rental.getLicenseNumber())
-                .deposit(rental.getDeposit())
                 .returnDate(rental.getReturnDate())
                 .returnKm(rental.getReturnKm())
                 .reservation(ReservationDTO.toDTO(rental.getReservation()))

@@ -32,11 +32,17 @@ public class CarDTO {
 
     private List<Period> notAvailable = new ArrayList<>();
 
+    private int indicativePrice;
+
     public static CarDTO toDTO(Car car){
 
         CarDTOBuilder dto = CarDTO.builder();
 
-        dto.notAvailable(car.getReservations().stream().map(it -> new Period(it.getRemoval(), it.getRestitution())).toList());
+        dto.notAvailable(car.getReservations()
+                .stream()
+                .map(it -> new Period(it.getRemoval(), it.getRestitution()))
+                .toList());
+
 
         return dto
                 .id(car.getId())
@@ -50,5 +56,4 @@ public class CarDTO {
                 .build();
 
     }
-
 }

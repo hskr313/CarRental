@@ -16,12 +16,15 @@ public class Reservation extends BaseEntity<Long>{
 
     @Column(nullable = false)
     private LocalDate removal;
+
     @Column(nullable = false)
+    private LocalDate theoricRestitution;
     private LocalDate restitution;
 
-    private String reservStatus;
+    @Enumerated(EnumType.ORDINAL)
+    private ReservationStatus reservStatus;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     private Reservation substitution;
 
     @OneToOne(mappedBy = "reservation")
@@ -34,5 +37,19 @@ public class Reservation extends BaseEntity<Long>{
     @ManyToOne
     private RentalFormula rentalFormula;
 
-    //TODO faire une enumeration pour le status de reservation ou une table ?
+    private LocalDate cancellationDate;
+
+    private double finDeleted;
+
+    public void delete() {
+        this.cancellationDate = LocalDate.now();
+    }
+
+    public void cancel(){
+        this.substitution = new Reservation();
+    }
+
+    public void finish(){
+        this.restitution = LocalDate.now();
+    }
 }
