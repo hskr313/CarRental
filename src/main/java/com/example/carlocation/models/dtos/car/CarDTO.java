@@ -53,6 +53,7 @@ public class CarDTO {
                 .repair(car.isRepair())
                 .returnDate(car.getReturnDate())
                 .model(ModelDTO.toDTO(car.getModel()))
+                .indicativePrice(car.getIndicativePrice())
                 .build();
 
     }

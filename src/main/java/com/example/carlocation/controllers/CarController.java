@@ -25,7 +25,7 @@ public class CarController{
         this.carService = carService;
     }
 
-    @GetMapping(path = "/{id}:[0-9]+")
+    @GetMapping(path = "/{id:[0-9]+}")
     public ResponseEntity<CarDTO> readOne(@PathVariable Long id) {
 
         Car car = this.carService.readOneByKey(id).orElseThrow(() -> new HttpNotFoundException("car with id (" + id + ") doesn't exist"));

@@ -23,15 +23,15 @@ public class ClientController implements BaseRestController<ClientDTO, Long>{
         this.clientService = clientService;
     }
 
-    @GetMapping()
+    @GetMapping(path = "")
     public ResponseEntity<Collection<ClientDTO>> readAll(){
         return ResponseEntity.ok(this.clientService.readAll()
                 .map(ClientDTO::toDTO)
                 .toList());
     }
 
-    @GetMapping(path = {"/id:[0-9]+"})
-    public ResponseEntity<ClientDTO> readOne(Long id){
+    @GetMapping(path = "/{id:[0-9]+}")
+    public ResponseEntity<ClientDTO> readOne(@PathVariable Long id){
 
         Client client = this.clientService.readOneByKey(id).orElseThrow( () -> new HttpNotFoundException("Client with Id(" + id + ") doesn't exist"));
 

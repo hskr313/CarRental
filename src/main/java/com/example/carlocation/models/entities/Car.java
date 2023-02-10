@@ -30,6 +30,8 @@ public class Car extends BaseEntity<Long> {
 
     private LocalDate returnDate;
 
+    private int indicativePrice;
+
     @ManyToOne(cascade = {CascadeType.PERSIST})
     @MapsId("modelId")
     private Model model;
