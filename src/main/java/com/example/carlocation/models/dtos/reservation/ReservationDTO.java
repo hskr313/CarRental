@@ -1,11 +1,9 @@
 package com.example.carlocation.models.dtos.reservation;
 
-import com.example.carlocation.models.dtos.car.CarDTO;
-import com.example.carlocation.models.dtos.client.ClientDTO;
+import com.example.carlocation.models.dtos.customer.CustomerDTO;
 import com.example.carlocation.models.dtos.rental.RentalDTO;
 
 import com.example.carlocation.models.dtos.rentalFormula.RentalFormulaDTO;
-import com.example.carlocation.models.entities.RentalFormula;
 import com.example.carlocation.models.entities.Reservation;
 import com.example.carlocation.models.entities.ReservationStatus;
 import lombok.AllArgsConstructor;
@@ -34,13 +32,15 @@ public class ReservationDTO {
 
     private RentalDTO rental;
 
-    private ClientDTO client;
+    private CustomerDTO client;
 
     private RentalFormulaDTO rentalFormula;
 
     private LocalDate cancellationDate;
 
     private double finDeleted;
+
+    private double indicativePrice;
 
     public static ReservationDTO toDTO(Reservation reservation){
         if (reservation == null) return null;
@@ -52,7 +52,7 @@ public class ReservationDTO {
                 .reservStatus(reservation.getReservStatus())
                 .substitution(ReservationDTO.toDTO(reservation.getSubstitution()))
                 .rental(RentalDTO.toDTO(reservation.getRental()))
-                .client(ClientDTO.toDTO(reservation.getClient()))
+                .client(CustomerDTO.toDTO(reservation.getCustomer()))
                 .rentalFormula(RentalFormulaDTO.toDTO(reservation.getRentalFormula()))
                 .cancellationDate(reservation.getCancellationDate())
                 .finDeleted(reservation.getFinDeleted())

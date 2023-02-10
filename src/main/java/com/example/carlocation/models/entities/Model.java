@@ -22,8 +22,8 @@ public class Model extends RelationalEntity<Model.ModelId>{
     private List<Option> options;
 
     @ManyToOne
-    @MapsId("tarificationClassId")
-    private TarificationClass tarificationClass;
+    @MapsId("pricingClassId")
+    private PricingClass pricingClass;
 
     @Embeddable
     @Data

@@ -2,22 +2,19 @@ package com.example.carlocation.controllers;
 
 import com.example.carlocation.exceptions.HttpNotFoundException;
 import com.example.carlocation.exceptions.HttpPreconditionFailedException;
-import com.example.carlocation.models.dtos.car.CarDTO;
 import com.example.carlocation.models.dtos.reservation.ReservationDTO;
 import com.example.carlocation.models.entities.Car;
-import com.example.carlocation.models.entities.Client;
+import com.example.carlocation.models.entities.Customer;
 import com.example.carlocation.models.entities.Reservation;
 import com.example.carlocation.models.entities.ReservationStatus;
 import com.example.carlocation.models.forms.ReservationAddForm;
 import com.example.carlocation.services.car.CarService;
-import com.example.carlocation.services.client.ClientService;
+import com.example.carlocation.services.customer.CustomerService;
 import com.example.carlocation.services.reservation.ReservationService;
-import com.example.carlocation.services.reservation.ReservationServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Period;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -29,27 +26,28 @@ public class ReservationController implements BaseRestController<ReservationDTO,
 
     private final CarService carService;
 
-    private final ClientService clientService;
+    private final CustomerService customerService;
 
-    public ReservationController(ReservationService reservationService, CarService carService, ClientService clientService) {
+    public ReservationController(ReservationService reservationService, CarService carService, CustomerService customerService) {
         this.reservationService = reservationService;
         this.carService = carService;
-        this.clientService = clientService;
+        this.customerService = customerService;
     }
 
     @Override
     @GetMapping(path = "/{id}:[0-9]+")
     public ResponseEntity<ReservationDTO> readOne(@PathVariable Long id) {
         Reservation reservation = this.reservationService.readOneByKey(id).orElseThrow(() -> new HttpNotFoundException("Reservation with id :(" + id + ") does not exist"));
-
-        return ResponseEntity.ok(ReservationDTO.toDTO(reservation));
+        ReservationDTO reservationDTO = ReservationDTO.toDTO(reservation);
+        // TODO set le prix indicatif
+        return ResponseEntity.ok(reservationDTO);
     }
 
     @Override
     @GetMapping(path = "")
     public ResponseEntity<Collection<ReservationDTO>> readAll() {
         return ResponseEntity.ok(this.reservationService.readAll()
-                .map(ReservationDTO::toDTO)
+                .map(ReservationDTO::toDTO)// TODO refaire un .map pour set le prix indicatif
                 .toList());
     }
     @PostMapping(path = "")
@@ -61,10 +59,10 @@ public class ReservationController implements BaseRestController<ReservationDTO,
             throw new HttpPreconditionFailedException("Car is not available", new ArrayList<>());
         }
 
-        Client client = this.clientService
+        Customer customer = this.customerService
                 .readOneByKey(form.getIdCustomer())
-                .orElse(this.clientService.save(form.getClient().toBLL()));
-        reservation.setClient(client);
+                .orElse(this.customerService.save(form.getClient().toBLL()));
+        reservation.setCustomer(customer);
 
         try{
             reservation = this.reservationService.save(reservation);

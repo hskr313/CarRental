@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Client extends BaseEntity<Long>{
+public class Customer extends BaseEntity<Long>{
 
     @Column(nullable = false)
     private String fisrtname;
@@ -22,6 +22,4 @@ public class Client extends BaseEntity<Long>{
     @Embedded
     private Address address;
 
-    @OneToMany(mappedBy = "client")
-    private List<Reservation> reservations;
 }

@@ -7,6 +7,7 @@ import com.example.carlocation.models.dtos.car.CarDTO;
 import com.example.carlocation.models.entities.Car;
 import com.example.carlocation.models.forms.CarAddForm;
 import com.example.carlocation.services.car.CarService;
+import com.example.carlocation.services.reservation.ReservationService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +23,11 @@ public class CarController{
 
     private final CarService carService;
 
-    public CarController(CarService carService) {
+    private final ReservationService reservationService;
+
+    public CarController(CarService carService, ReservationService reservationService) {
         this.carService = carService;
+        this.reservationService = reservationService;
     }
 
     @GetMapping(path = "/{id:[0-9]+}")
@@ -49,7 +53,13 @@ public class CarController{
     public ResponseEntity<List<Period>> getNotAvailable(@PathVariable Long id){
         Car car = this.carService.readOneByKey(id).orElseThrow(() -> new HttpNotFoundException("There is no car with id:(" + id + ")"));
 
-        return ResponseEntity.ok(CarDTO.toDTO(car).getNotAvailable());
+        CarDTO carDTO = CarDTO.toDTO(car);
+        carDTO.setNotAvailable(reservationService.findAllByCar(car)
+                .stream()
+                .map(it -> new Period(it.getRemoval(), it.getRestitution()))
+                .toList());
+
+        return ResponseEntity.ok(carDTO.getNotAvailable());
     }
 
     @PostMapping(path = "")
@@ -75,7 +85,6 @@ public class CarController{
         car.setReturnDate(form.getReturnDate());
         car.setBuyDate(form.getBuyDate());
         car.setBuyPrice(form.getBuyPrice());
-        car.setIndicativePrice(form.getIndicativePrice());
         car.setSupplier(form.getSupplier());
         car.setUpdatedAt(LocalDate.now());
 

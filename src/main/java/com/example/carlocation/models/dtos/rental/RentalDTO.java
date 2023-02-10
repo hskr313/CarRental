@@ -1,10 +1,7 @@
 package com.example.carlocation.models.dtos.rental;
 
-import com.example.carlocation.models.dtos.car.CarDTO;
 import com.example.carlocation.models.dtos.reservation.ReservationDTO;
-import com.example.carlocation.models.entities.Car;
 import com.example.carlocation.models.entities.Rental;
-import com.example.carlocation.models.entities.TarificationFormula;
 import lombok.Builder;
 import lombok.Data;
 

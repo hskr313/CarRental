@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @RestController
+@RequestMapping(path = "rentalFormula")
 public class RentalFormulaController implements BaseRestController<RentalFormulaDTO, Long> {
 
     private final RentalFormulaService rentalFormulaService;

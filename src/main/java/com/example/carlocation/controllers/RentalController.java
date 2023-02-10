@@ -11,6 +11,4 @@ public class RentalController {
     public RentalController(RentalService rentalService) {
         this.rentalService = rentalService;
     }
-
-
 }

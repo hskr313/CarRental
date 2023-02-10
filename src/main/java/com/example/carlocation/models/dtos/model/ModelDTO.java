@@ -1,7 +1,7 @@
 package com.example.carlocation.models.dtos.model;
 
 import com.example.carlocation.models.dtos.option.OptionDTO;
-import com.example.carlocation.models.dtos.tarificationClass.TarificationClassDTO;
+import com.example.carlocation.models.dtos.pricingClass.PricingClassDTO;
 
 import com.example.carlocation.models.entities.Model;
 import lombok.Builder;
@@ -19,7 +19,7 @@ public class ModelDTO {
 
     private int power;
 
-    private TarificationClassDTO tarificationClass;
+    private PricingClassDTO tarificationClass;
 
     private List<OptionDTO> options;
 
@@ -29,7 +29,7 @@ public class ModelDTO {
                 .brand(model.getId().getBrand())
                 .type(model.getId().getType())
                 .power(model.getId().getPower())
-                .tarificationClass(TarificationClassDTO.toDTO(model.getTarificationClass()))
+                .tarificationClass(PricingClassDTO.toDTO(model.getPricingClass()))
                 .options(model.getOptions().stream()
                         .map(OptionDTO::toDTO)
                         .toList())

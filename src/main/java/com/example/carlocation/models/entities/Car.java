@@ -2,7 +2,6 @@ package com.example.carlocation.models.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Cascade;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -30,13 +29,9 @@ public class Car extends BaseEntity<Long> {
 
     private LocalDate returnDate;
 
-    private int indicativePrice;
-
     @ManyToOne(cascade = {CascadeType.PERSIST})
     @MapsId("modelId")
     private Model model;
 
-    @OneToMany
-    private List<Reservation> reservations = new ArrayList<>();
 
 }

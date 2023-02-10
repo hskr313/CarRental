@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.Period;
-import java.time.temporal.ChronoUnit;
 
 @Entity
 @Getter
@@ -33,8 +31,8 @@ public class Reservation extends BaseEntity<Long>{
     private Rental rental;
 
     @ManyToOne
-    @MapsId("ClientId")
-    private Client client;
+    @MapsId("CustomerId")
+    private Customer customer;
 
     @ManyToOne
     private RentalFormula rentalFormula;

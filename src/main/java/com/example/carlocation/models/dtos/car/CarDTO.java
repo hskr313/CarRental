@@ -32,17 +32,10 @@ public class CarDTO {
 
     private List<Period> notAvailable = new ArrayList<>();
 
-    private int indicativePrice;
 
     public static CarDTO toDTO(Car car){
 
         CarDTOBuilder dto = CarDTO.builder();
-
-        dto.notAvailable(car.getReservations()
-                .stream()
-                .map(it -> new Period(it.getRemoval(), it.getRestitution()))
-                .toList());
-
 
         return dto
                 .id(car.getId())
@@ -53,7 +46,6 @@ public class CarDTO {
                 .repair(car.isRepair())
                 .returnDate(car.getReturnDate())
                 .model(ModelDTO.toDTO(car.getModel()))
-                .indicativePrice(car.getIndicativePrice())
                 .build();
 
     }

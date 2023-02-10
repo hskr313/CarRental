@@ -1,7 +1,6 @@
 package com.example.carlocation.models.forms;
 
 import com.example.carlocation.models.entities.Reservation;
-import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 
@@ -21,7 +20,7 @@ public class ReservationAddForm {
 
     private Long idCustomer;
 
-    private ClientAddForm client;
+    private CustomerAddForm client;
 
     public Reservation toBLL(){
         return Reservation.builder()
