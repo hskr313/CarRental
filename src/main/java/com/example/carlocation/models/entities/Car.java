@@ -39,5 +39,4 @@ public class Car extends BaseEntity<Long> {
     @OneToMany
     private List<Reservation> reservations = new ArrayList<>();
 
-    //TODO demander si je dois redefinir mon setter pour la date
 }
