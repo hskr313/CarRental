@@ -1,14 +1,16 @@
 package com.example.carlocation.controllers;
 
 import com.example.carlocation.exceptions.HttpNotFoundException;
+import com.example.carlocation.exceptions.HttpPreconditionFailedException;
 import com.example.carlocation.models.dtos.rentalFormula.RentalFormulaDTO;
 import com.example.carlocation.models.entities.RentalFormula;
+import com.example.carlocation.models.forms.RentalFormulaAddForm;
 import com.example.carlocation.services.rentalFormula.RentalFormulaService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 @RestController
@@ -33,5 +35,16 @@ public class RentalFormulaController implements BaseRestController<RentalFormula
         return ResponseEntity.ok(this.rentalFormulaService.readAll()
                 .map(RentalFormulaDTO::toDTO)
                 .toList());
+    }
+
+    @PostMapping(path = "")
+    public ResponseEntity<RentalFormulaDTO> addOne(@Valid @RequestBody RentalFormulaAddForm form){
+        RentalFormula formula = new RentalFormula();
+        try{
+            formula = this.rentalFormulaService.save(form.toBLL());
+        } catch (Exception exception) {
+            throw new HttpPreconditionFailedException(exception.getMessage(), new ArrayList<>());
+        }
+        return ResponseEntity.ok(RentalFormulaDTO.toDTO(formula));
     }
 }

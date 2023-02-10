@@ -54,7 +54,7 @@ public class CarController{
 
     @PostMapping(path = "")
     public ResponseEntity<CarDTO> addCar( @Valid @RequestBody CarAddForm carAddForm ){
-        if (!carAddForm.isRepair()) {
+        if (carAddForm.isRepair()) {
             carAddForm.setReturnDate(null);
         }
         Car car = new Car();
