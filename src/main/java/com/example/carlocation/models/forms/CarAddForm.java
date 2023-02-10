@@ -31,6 +31,8 @@ public class CarAddForm {
     @NotNull
     private ModelAddForm model;
 
+    private int indicativePrice;
+
     public Car toBLL(){
         return Car.builder()
                 .buyPrice(buyPrice)

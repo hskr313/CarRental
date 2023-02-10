@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -61,6 +62,27 @@ public class CarController{
             car = this.carService.save(carAddForm.toBLL());
         }catch (Exception exception){
             throw new HttpPreconditionFailedException(exception.getMessage(), new ArrayList<>());
+        }
+        return ResponseEntity.ok(CarDTO.toDTO(car));
+    }
+
+    @PutMapping(path = "/{id:[0-9]+}")
+    public ResponseEntity<CarDTO> updateOne(@PathVariable Long id, @Valid @RequestBody CarAddForm form){
+        Car car = this.carService.readOneByKey(id).orElseThrow( () -> new HttpNotFoundException("There is no car with id:(" + id + ")"));
+
+        car.setRepair(form.isRepair());
+        car.setKm(form.getKm());
+        car.setReturnDate(form.getReturnDate());
+        car.setBuyDate(form.getBuyDate());
+        car.setBuyPrice(form.getBuyPrice());
+        car.setIndicativePrice(form.getIndicativePrice());
+        car.setSupplier(form.getSupplier());
+        car.setUpdatedAt(LocalDate.now());
+
+        try {
+            this.carService.save(car);
+        } catch (Exception exception) {
+            throw new HttpPreconditionFailedException("Car can't be updated", new ArrayList<>());
         }
         return ResponseEntity.ok(CarDTO.toDTO(car));
     }
