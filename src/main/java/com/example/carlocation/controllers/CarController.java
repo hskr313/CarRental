@@ -51,7 +51,7 @@ public class CarController{
         return ResponseEntity.ok(CarDTO.toDTO(car).getNotAvailable());
     }
 
-    @PostMapping(path = {"/add"})
+    @PostMapping(path = "")
     public ResponseEntity<CarDTO> addCar( @Valid @RequestBody CarAddForm carAddForm ){
         if (!carAddForm.isRepair()) {
             carAddForm.setReturnDate(null);

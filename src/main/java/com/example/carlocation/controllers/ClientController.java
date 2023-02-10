@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -38,13 +39,31 @@ public class ClientController implements BaseRestController<ClientDTO, Long>{
         return ResponseEntity.ok(ClientDTO.toDTO(client));
     }
 
-    @PostMapping(path = {"/add"})
+    @PostMapping(path = "")
     public ResponseEntity<ClientDTO> addClient(@Valid @RequestBody ClientAddForm form){
         Client client = new Client();
         try{
             client = this.clientService.save(form.toBLL());
         }catch (Exception exception){
             throw new HttpPreconditionFailedException(exception.getMessage(), new ArrayList<>());
+        }
+
+        return ResponseEntity.ok(ClientDTO.toDTO(client));
+    }
+
+    @PutMapping (path = "/{id:[0-9]+}")
+    public ResponseEntity<ClientDTO> updateOne(@PathVariable Long id, @Valid @RequestBody ClientAddForm form){
+        Client client = this.clientService.readOneByKey(id).orElseThrow(() -> new HttpNotFoundException("Client with Id(" + id + ") doesn't exist"));
+
+        client.setAddress(form.toBLL().getAddress());
+        client.setFisrtname(form.getFirstname());
+        client.setLastname(form.getLastname());
+        client.setUpdatedAt(LocalDate.now());
+
+        try {
+            this.clientService.save(client);
+        } catch (Exception exception){
+            throw new HttpPreconditionFailedException("Can't update client", new ArrayList<>());
         }
 
         return ResponseEntity.ok(ClientDTO.toDTO(client));
