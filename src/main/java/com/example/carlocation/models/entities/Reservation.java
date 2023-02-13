@@ -44,6 +44,8 @@ public class Reservation extends BaseEntity<Long>{
 
     private double finDeleted;
 
+    private double indicativePrice;
+
     public void delete() {
         this.cancellationDate = LocalDate.now();
     }

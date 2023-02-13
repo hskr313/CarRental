@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = {"/reservation"})
@@ -39,7 +40,7 @@ public class ReservationController implements BaseRestController<ReservationDTO,
     public ResponseEntity<ReservationDTO> readOne(@PathVariable Long id) {
         Reservation reservation = this.reservationService.readOneByKey(id).orElseThrow(() -> new HttpNotFoundException("Reservation with id :(" + id + ") does not exist"));
         ReservationDTO reservationDTO = ReservationDTO.toDTO(reservation);
-        // TODO set le prix indicatif
+        reservationDTO.setIndicativePrice(reservation.getRentalFormula().getMaxKm() * reservation.getCar().getModel().getPricingClass().getPrice_km());
         return ResponseEntity.ok(reservationDTO);
     }
 
@@ -47,7 +48,8 @@ public class ReservationController implements BaseRestController<ReservationDTO,
     @GetMapping(path = "")
     public ResponseEntity<Collection<ReservationDTO>> readAll() {
         return ResponseEntity.ok(this.reservationService.readAll()
-                .map(ReservationDTO::toDTO)// TODO refaire un .map pour set le prix indicatif
+                .peek(r -> r.setIndicativePrice(r.getRentalFormula().getMaxKm() * r.getCar().getModel().getPricingClass().getPrice_km()))
+                .map(ReservationDTO::toDTO)
                 .toList());
     }
     @PostMapping(path = "")
