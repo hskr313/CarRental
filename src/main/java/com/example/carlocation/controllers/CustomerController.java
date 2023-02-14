@@ -41,9 +41,9 @@ public class CustomerController implements BaseRestController<CustomerDTO, Long>
 
     @PostMapping(path = "")
     public ResponseEntity<CustomerDTO> addClient(@Valid @RequestBody CustomerAddForm form){
-        Customer customer = new Customer();
+        Customer customer = form.toBLL();
         try{
-            customer = this.customerService.save(form.toBLL());
+            this.customerService.save(customer);
         }catch (Exception exception){
             throw new HttpPreconditionFailedException(exception.getMessage(), new ArrayList<>());
         }

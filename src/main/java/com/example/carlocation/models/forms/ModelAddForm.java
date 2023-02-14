@@ -14,7 +14,7 @@ public class ModelAddForm {
 
     private List<OptionAddForm> options;
 
-    private PricingClassAddForm pricingClass; // TODO Changer ici
+    private Long pricingClassId;
 
     private String brand;
 

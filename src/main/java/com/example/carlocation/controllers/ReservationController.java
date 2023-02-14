@@ -71,7 +71,7 @@ public class ReservationController implements BaseRestController<ReservationDTO,
         reservation.setCustomer(customer);
 
         try{
-            reservation = this.reservationService.save(reservation);
+            this.reservationService.save(reservation);
         }catch (Exception exception){
             throw new HttpPreconditionFailedException("Form is not valid", new ArrayList<>());
         }

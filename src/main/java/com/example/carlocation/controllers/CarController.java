@@ -7,6 +7,8 @@ import com.example.carlocation.models.dtos.car.CarDTO;
 import com.example.carlocation.models.entities.Car;
 import com.example.carlocation.models.forms.CarAddForm;
 import com.example.carlocation.services.car.CarService;
+import com.example.carlocation.services.model.ModelService;
+import com.example.carlocation.services.pricingClass.PricingClassService;
 import com.example.carlocation.services.reservation.ReservationService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +27,12 @@ public class CarController{
 
     private final ReservationService reservationService;
 
-    public CarController(CarService carService, ReservationService reservationService) {
+    private final PricingClassService pricingClassService;
+
+    public CarController(CarService carService, ReservationService reservationService, PricingClassService pricingClassService) {
         this.carService = carService;
         this.reservationService = reservationService;
+        this.pricingClassService = pricingClassService;
     }
 
     @GetMapping(path = "/{id:[0-9]+}")
@@ -67,9 +72,11 @@ public class CarController{
         if (carAddForm.isRepair()) {
             carAddForm.setReturnDate(null);
         }
-        Car car = new Car();
+        Car car = carAddForm.toBLL();
+        car.getModel().setPricingClass(this.pricingClassService.readOneByKey(carAddForm.getModel().getPricingClassId())
+                .orElseThrow( () -> new HttpNotFoundException("There is no pricing class with the id : " + carAddForm.getModel().getPricingClassId())));
         try {
-            car = this.carService.save(carAddForm.toBLL());
+            this.carService.save(car);
         }catch (Exception exception){
             throw new HttpPreconditionFailedException(exception.getMessage(), new ArrayList<>());
         }

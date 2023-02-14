@@ -40,9 +40,9 @@ public class RentalFormulaController implements BaseRestController<RentalFormula
 
     @PostMapping(path = "")
     public ResponseEntity<RentalFormulaDTO> addOne(@Valid @RequestBody RentalFormulaAddForm form){
-        RentalFormula formula = new RentalFormula();
+        RentalFormula formula = form.toBLL();
         try{
-            formula = this.rentalFormulaService.save(form.toBLL());
+            formula = this.rentalFormulaService.save(formula);
         } catch (Exception exception) {
             throw new HttpPreconditionFailedException(exception.getMessage(), new ArrayList<>());
         }
