@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
 
@@ -34,6 +35,7 @@ public class ReservationServiceImpl extends CrudServiceImpl<ReservationRepositor
 
     public void restitution(Reservation reservation) {
         this.changeStatus(reservation, ReservationStatus.finished);
+        reservation.setClosingDate(LocalDate.now());
     }
 
     public void cancellation(Reservation reservation) {
