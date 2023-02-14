@@ -1,15 +1,18 @@
 package com.example.carlocation.controllers;
 
 import com.example.carlocation.exceptions.HttpNotFoundException;
+import com.example.carlocation.exceptions.HttpPreconditionFailedException;
 import com.example.carlocation.models.dtos.rental.RentalDTO;
 import com.example.carlocation.models.entities.Rental;
+import com.example.carlocation.models.entities.Reservation;
+import com.example.carlocation.models.forms.RentalAddForm;
 import com.example.carlocation.services.rental.RentalService;
+import com.example.carlocation.services.reservation.ReservationService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 @RestController
@@ -18,8 +21,11 @@ public class RentalController implements BaseRestController<RentalDTO, Long> {
 
     private final RentalService rentalService;
 
-    public RentalController(RentalService rentalService) {
+    private final ReservationService reservationService;
+
+    public RentalController(RentalService rentalService, ReservationService reservationService) {
         this.rentalService = rentalService;
+        this.reservationService = reservationService;
     }
 
     @GetMapping(path = "/{id:[0_9]+}")
@@ -36,5 +42,21 @@ public class RentalController implements BaseRestController<RentalDTO, Long> {
         return ResponseEntity.ok(this.rentalService.readAll()
                 .map(RentalDTO::toDTO)
                 .toList());
+    }
+
+    @PostMapping(path = "")
+    public ResponseEntity<RentalDTO> addOne(@Valid @RequestBody RentalAddForm form){
+        Rental rental = form.toBLL();
+
+        Reservation reservation = this.reservationService.readOneByKey(form.getReservationId()).orElseThrow( () -> new HttpNotFoundException("There is no reservation with id : " + form.getReservationId()));
+        rental.setReservation(reservation);
+
+        try{
+            this.rentalService.save(rental);
+        } catch (Exception exception) {
+            throw new HttpPreconditionFailedException("Form is not valid", new ArrayList<>());
+        }
+
+        return ResponseEntity.ok(RentalDTO.toDTO(rental));
     }
 }

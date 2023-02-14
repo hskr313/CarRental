@@ -14,7 +14,7 @@ public class ReservationAddForm {
 
     private LocalDate restitution;
 
-    private RentalFormulaAddForm rentalFormula;
+    private RentalFormulaAddForm rentalFormula; // TODO utiliser uniquement l'id
 
     private Long idCar;
 
