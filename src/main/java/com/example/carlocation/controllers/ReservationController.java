@@ -54,7 +54,7 @@ public class ReservationController implements BaseRestController<ReservationDTO,
     }
     @PostMapping(path = "")
     public ResponseEntity<ReservationDTO> addReservation(@Valid @RequestBody ReservationAddForm form){
-        Reservation reservation = new Reservation();
+        Reservation reservation = form.toBLL();
 
         Car car = this.carService.readOneByKey(form.getIdCar()).orElseThrow(() -> new HttpNotFoundException("There is no car with id:(" + form.getIdCar()+ ")"));
         if (!this.carService.isAvailable(car,form.getRemoval(),form.getRestitution())){
@@ -63,7 +63,7 @@ public class ReservationController implements BaseRestController<ReservationDTO,
 
         Customer customer = this.customerService
                 .readOneByKey(form.getIdCustomer())
-                .orElse(this.customerService.save(form.getClient().toBLL()));
+                .orElse(this.customerService.save(form.getClient().toBLL())); // TODO est ce que le customer est sauvegardé en base de donnée ?
         reservation.setCustomer(customer);
 
         try{
