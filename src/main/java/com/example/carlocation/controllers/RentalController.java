@@ -6,6 +6,7 @@ import com.example.carlocation.models.dtos.rental.RentalDTO;
 import com.example.carlocation.models.entities.Rental;
 import com.example.carlocation.models.entities.Reservation;
 import com.example.carlocation.models.forms.RentalAddForm;
+import com.example.carlocation.services.car.CarService;
 import com.example.carlocation.services.rental.RentalService;
 import com.example.carlocation.services.reservation.ReservationService;
 import jakarta.validation.Valid;
@@ -23,9 +24,12 @@ public class RentalController implements BaseRestController<RentalDTO, Long> {
 
     private final ReservationService reservationService;
 
-    public RentalController(RentalService rentalService, ReservationService reservationService) {
+    private final CarService carService;
+
+    public RentalController(RentalService rentalService, ReservationService reservationService, CarService carService) {
         this.rentalService = rentalService;
         this.reservationService = reservationService;
+        this.carService = carService;
     }
 
     @GetMapping(path = "/{id:[0_9]+}")
@@ -50,6 +54,10 @@ public class RentalController implements BaseRestController<RentalDTO, Long> {
 
         Reservation reservation = this.reservationService.readOneByKey(form.getReservationId()).orElseThrow( () -> new HttpNotFoundException("There is no reservation with id : " + form.getReservationId()));
         rental.setReservation(reservation);
+
+        if (!this.carService.isAvailable(reservation.getCar(), reservation.getRemoval(), reservation.getRestitution())){
+            throw new HttpPreconditionFailedException("car is not available", new ArrayList<>());
+        }
 
         try{
             this.rentalService.save(rental);
