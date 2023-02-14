@@ -14,7 +14,7 @@ public class ReservationAddForm {
 
     private LocalDate restitution;
 
-    private RentalFormulaAddForm rentalFormula; // TODO utiliser uniquement l'id
+    private Long rentalFormulaId; // TODO utiliser uniquement l'id
 
     private Long idCar;
 
@@ -26,7 +26,6 @@ public class ReservationAddForm {
         return Reservation.builder()
                 .removal(removal)
                 .restitution(restitution)
-                .rentalFormula(rentalFormula.toBLL())
                 .build();
     }
 }

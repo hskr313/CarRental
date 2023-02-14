@@ -3,13 +3,11 @@ package com.example.carlocation.controllers;
 import com.example.carlocation.exceptions.HttpNotFoundException;
 import com.example.carlocation.exceptions.HttpPreconditionFailedException;
 import com.example.carlocation.models.dtos.reservation.ReservationDTO;
-import com.example.carlocation.models.entities.Car;
-import com.example.carlocation.models.entities.Customer;
-import com.example.carlocation.models.entities.Reservation;
-import com.example.carlocation.models.entities.ReservationStatus;
+import com.example.carlocation.models.entities.*;
 import com.example.carlocation.models.forms.ReservationAddForm;
 import com.example.carlocation.services.car.CarService;
 import com.example.carlocation.services.customer.CustomerService;
+import com.example.carlocation.services.rentalFormula.RentalFormulaService;
 import com.example.carlocation.services.reservation.ReservationService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -27,11 +25,14 @@ public class ReservationController implements BaseRestController<ReservationDTO,
 
     private final CarService carService;
 
+    private final RentalFormulaService formulaService;
+
     private final CustomerService customerService;
 
-    public ReservationController(ReservationService reservationService, CarService carService, CustomerService customerService) {
+    public ReservationController(ReservationService reservationService, CarService carService, CustomerService customerService, RentalFormulaService formulaService) {
         this.reservationService = reservationService;
         this.carService = carService;
+        this.formulaService = formulaService;
         this.customerService = customerService;
     }
 
@@ -60,6 +61,9 @@ public class ReservationController implements BaseRestController<ReservationDTO,
         if (!this.carService.isAvailable(car,form.getRemoval(),form.getRestitution())){
             throw new HttpPreconditionFailedException("Car is not available", new ArrayList<>());
         }
+
+        RentalFormula formula = this.formulaService.readOneByKey(form.getRentalFormulaId()).orElseThrow( () -> new HttpNotFoundException("There is no formula with id : " + form.getRentalFormulaId()));
+        reservation.setRentalFormula(formula);
 
         Customer customer = this.customerService
                 .readOneByKey(form.getIdCustomer())
