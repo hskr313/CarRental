@@ -33,7 +33,7 @@ public class ReservationServiceImpl extends CrudServiceImpl<ReservationRepositor
         }
     }
 
-    public void restitution(Reservation reservation) {
+    public void ending(Reservation reservation) {
         this.changeStatus(reservation, ReservationStatus.finished);
         reservation.setClosingDate(LocalDate.now());
     }

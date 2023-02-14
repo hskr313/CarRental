@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ReservationService extends CrudService<Reservation, Long> {
-    void restitution(Reservation reservation);
+    void ending(Reservation reservation);
 
     void cancellation(Reservation reservation);
 

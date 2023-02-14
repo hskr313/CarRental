@@ -57,6 +57,6 @@ public class Reservation extends BaseEntity<Long>{
     }
 
     public void finish(){
-        this.restitution = LocalDate.now();
+        this.closingDate = LocalDate.now();
     }
 }
