@@ -2,18 +2,22 @@ package com.example.carlocation.controllers;
 
 import com.example.carlocation.exceptions.HttpNotFoundException;
 import com.example.carlocation.exceptions.HttpPreconditionFailedException;
+import com.example.carlocation.models.dtos.fin.FinDTO;
 import com.example.carlocation.models.dtos.rental.RentalDTO;
+import com.example.carlocation.models.entities.Fin;
 import com.example.carlocation.models.entities.Rental;
 import com.example.carlocation.models.entities.Reservation;
 import com.example.carlocation.models.forms.RentalAddForm;
 import com.example.carlocation.models.forms.RentalReturnForm;
 import com.example.carlocation.services.car.CarService;
+import com.example.carlocation.services.fin.FinService;
 import com.example.carlocation.services.rental.RentalService;
 import com.example.carlocation.services.reservation.ReservationService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -27,10 +31,13 @@ public class RentalController implements BaseRestController<RentalDTO, Long> {
 
     private final CarService carService;
 
-    public RentalController(RentalService rentalService, ReservationService reservationService, CarService carService) {
+    private final FinService finService;
+
+    public RentalController(RentalService rentalService, ReservationService reservationService, CarService carService, FinService finService) {
         this.rentalService = rentalService;
         this.reservationService = reservationService;
         this.carService = carService;
+        this.finService = finService;
     }
 
     @GetMapping(path = "/{id:[0_9]+}")
@@ -80,6 +87,21 @@ public class RentalController implements BaseRestController<RentalDTO, Long> {
 
         rental.setReturnKm(form.getReturnKm());
         rental.setReturnDate(form.getReturnDate());
+        if (Period.between(rental.getReservation().getTheoricRestitution(), rental.getReturnDate()).getDays() != 0){
+            Fin fin = new Fin();
+            fin.setAmount(Period.between(rental.getReservation().getTheoricRestitution(), rental.getReturnDate()).getDays() *
+                    rental.getReservation().getCar().getModel().getPricingClass().getFine_day());
+            fin.setReason("extra days : " + Period.between(rental.getReservation().getTheoricRestitution(), rental.getReturnDate()).getDays());
+            rental.getFins().add(fin);
+        }
+
+        if ((rental.getReturnKm() - rental.getStartKm()) > rental.getReservation().getRentalFormula().getMaxKm()){
+            Fin fin = new Fin();
+            fin.setAmount((rental.getReturnKm() - rental.getStartKm()) *
+                    rental.getReservation().getCar().getModel().getPricingClass().getPrice_km());
+            fin.setReason("extra KM: " + (rental.getReturnKm() - rental.getStartKm()));
+            rental.getFins().add(fin);
+        }
 
         try {
             this.rentalService.save(rental);
@@ -90,5 +112,9 @@ public class RentalController implements BaseRestController<RentalDTO, Long> {
         return ResponseEntity.ok(RentalDTO.toDTO(rental));
     }
 
+    @PatchMapping(path = "/fin/{id:[0-9]+}")
+    public ResponseEntity<FinDTO> changePayedStatus(@PathVariable Long id) {
+            return ResponseEntity.ok(FinDTO.ToDTO(this.finService.ChangePayedStatus(id)));
+    }
 
 }

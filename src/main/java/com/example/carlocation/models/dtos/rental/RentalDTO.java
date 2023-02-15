@@ -1,11 +1,14 @@
 package com.example.carlocation.models.dtos.rental;
 
+import com.example.carlocation.models.dtos.fin.FinDTO;
 import com.example.carlocation.models.dtos.reservation.ReservationDTO;
 import com.example.carlocation.models.entities.Rental;
 import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -25,6 +28,8 @@ public class RentalDTO {
 
     private ReservationDTO reservation;
 
+    List<FinDTO> fins;
+
     public static RentalDTO toDTO(Rental rental){
         if (rental == null) return null;
         return RentalDTO.builder()
@@ -34,6 +39,9 @@ public class RentalDTO {
                 .returnDate(rental.getReturnDate())
                 .returnKm(rental.getReturnKm())
                 .reservation(ReservationDTO.toDTO(rental.getReservation()))
+                .fins(rental.getFins().stream()
+                        .map(FinDTO::ToDTO)
+                        .toList())
                 .build();
     }
 }

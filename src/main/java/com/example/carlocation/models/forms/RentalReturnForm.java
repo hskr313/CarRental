@@ -13,6 +13,4 @@ public class RentalReturnForm {
 
     private Long returnKm;
 
-    private Long rentalId;
-
 }

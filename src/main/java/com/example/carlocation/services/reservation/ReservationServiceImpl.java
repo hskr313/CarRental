@@ -9,7 +9,6 @@ import com.example.carlocation.repositories.ReservationRepository;
 import com.example.carlocation.services.CrudServiceImpl;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
 
@@ -32,7 +31,7 @@ public class ReservationServiceImpl extends CrudServiceImpl<ReservationRepositor
 
     public void ending(Reservation reservation) {
         this.changeStatus(reservation, ReservationStatus.finished);
-    } // TODO à changer
+    }
 
     public void cancellation(Reservation reservation) {
         this.changeStatus(reservation, ReservationStatus.canceled);

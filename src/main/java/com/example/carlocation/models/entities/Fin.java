@@ -17,4 +17,6 @@ public class Fin extends BaseEntity<Long>{
 
     private double amount;
 
+    private boolean paid = false;
+
 }
