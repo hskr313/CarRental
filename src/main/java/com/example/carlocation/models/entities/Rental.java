@@ -2,10 +2,13 @@ package com.example.carlocation.models.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -33,4 +36,7 @@ public class Rental extends BaseEntity<Long>{
 
     @OneToOne
     private Reservation reservation;
+
+    @OneToMany
+    List<Fin> fins = new ArrayList<>();
 }
