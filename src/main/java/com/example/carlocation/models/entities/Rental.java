@@ -23,7 +23,7 @@ public class Rental extends BaseEntity<Long>{
     private Long licenseNumber;
 
     @Column(nullable = false)
-    private int deposit;
+    private double deposit;
 
     @Column(nullable = false)
     private LocalDate returnDate;

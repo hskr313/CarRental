@@ -54,6 +54,11 @@ public class RentalController implements BaseRestController<RentalDTO, Long> {
 
         Reservation reservation = this.reservationService.readOneByKey(form.getReservationId()).orElseThrow( () -> new HttpNotFoundException("There is no reservation with id : " + form.getReservationId()));
         rental.setReservation(reservation);
+        rental.setDeposit(this.carService.getIndicativePriceByPricingAndFormula(
+                reservation.getCar().getId(),
+                reservation.getCar().getModel().getPricingClass().getId(),
+                reservation.getRentalFormula().getId()
+                ) * 0.2 );
 
         if (!this.carService.isAvailable(reservation.getCar(), reservation.getRemoval(), reservation.getRestitution())){
             throw new HttpPreconditionFailedException("car is not available", new ArrayList<>());
@@ -67,4 +72,6 @@ public class RentalController implements BaseRestController<RentalDTO, Long> {
 
         return ResponseEntity.ok(RentalDTO.toDTO(rental));
     }
+
+
 }

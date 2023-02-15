@@ -1,6 +1,5 @@
 package com.example.carlocation.services.reservation;
 
-import com.example.carlocation.models.dtos.car.CarDTO;
 import com.example.carlocation.models.entities.Car;
 import com.example.carlocation.models.entities.Customer;
 import com.example.carlocation.models.entities.Reservation;
@@ -8,8 +7,6 @@ import com.example.carlocation.models.entities.ReservationStatus;
 import com.example.carlocation.repositories.CarRepository;
 import com.example.carlocation.repositories.ReservationRepository;
 import com.example.carlocation.services.CrudServiceImpl;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -35,15 +32,14 @@ public class ReservationServiceImpl extends CrudServiceImpl<ReservationRepositor
 
     public void ending(Reservation reservation) {
         this.changeStatus(reservation, ReservationStatus.finished);
-        reservation.setClosingDate(LocalDate.now());
-    }
+    } // TODO à changer
 
     public void cancellation(Reservation reservation) {
         this.changeStatus(reservation, ReservationStatus.canceled);
     }
 
     public void deletion(Reservation reservation) {
-        Period period = Period.between(reservation.getRemoval(), reservation.getCancellationDate());
+        Period period = Period.between(reservation.getCancellationDate(), reservation.getRemoval());
         if ( period.getDays() < 2 ) {
             reservation.setFinDeleted(this.carRepository.getIndicativePriceByPricingAndFormula(
                     reservation.getCar().getId(),
@@ -51,8 +47,10 @@ public class ReservationServiceImpl extends CrudServiceImpl<ReservationRepositor
                     reservation.getRentalFormula().getId()
             ) * 0.2
             );
-        }
         this.changeStatus(reservation, ReservationStatus.deleted);
+        } else {
+            this.changeStatus(reservation, ReservationStatus.finished);
+        }
     }
 
     public List<Reservation> findAllByCar(Car car){

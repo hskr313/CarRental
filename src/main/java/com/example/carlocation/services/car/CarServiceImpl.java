@@ -39,4 +39,9 @@ public class CarServiceImpl extends CrudServiceImpl<CarRepository, Car, Long>
                 .filter(car -> this.isAvailable(car,startAt,endAt))
                 .toList();
     }
+
+    @Override
+    public double getIndicativePriceByPricingAndFormula(Long id, Long pcId, Long fId) {
+        return this.repository.getIndicativePriceByPricingAndFormula(id,pcId,fId);
+    }
 }

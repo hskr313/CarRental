@@ -41,7 +41,11 @@ public class ReservationController implements BaseRestController<ReservationDTO,
     public ResponseEntity<ReservationDTO> readOne(@PathVariable Long id) {
         Reservation reservation = this.reservationService.readOneByKey(id).orElseThrow(() -> new HttpNotFoundException("Reservation with id :(" + id + ") does not exist"));
         ReservationDTO reservationDTO = ReservationDTO.toDTO(reservation);
-        reservationDTO.setIndicativePrice(reservation.getRentalFormula().getMaxKm() * reservation.getCar().getModel().getPricingClass().getPrice_km());
+        reservationDTO.setIndicativePrice(this.carService.getIndicativePriceByPricingAndFormula(
+                reservation.getCar().getId(),
+                reservation.getCar().getModel().getPricingClass().getId(),
+                reservation.getRentalFormula().getId()
+        ));
         return ResponseEntity.ok(reservationDTO);
     }
 
@@ -84,7 +88,7 @@ public class ReservationController implements BaseRestController<ReservationDTO,
 
         switch (status) {
             case canceled -> reservationService.cancellation(reservation);
-            case finished -> reservationService.restitution(reservation);
+            case finished -> reservationService.ending(reservation);
         }
         try {
             this.reservationService.save(reservation);

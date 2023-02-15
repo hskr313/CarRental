@@ -7,7 +7,10 @@ public enum ReservationStatus {
         case 1, 2, 3 -> true;
         default -> false;
     }),
-    deleted((status) -> false),
+    deleted((status) -> switch (status.ordinal()){
+        case 3 -> true;
+        default -> false;
+    }),
     canceled((status) -> switch (status.ordinal()){
         case 2 -> true;
         default -> false;
