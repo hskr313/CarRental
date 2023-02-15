@@ -1,9 +1,6 @@
 package com.example.carlocation.models.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -28,10 +25,10 @@ public class Rental extends BaseEntity<Long>{
     @Column(nullable = false)
     private double deposit;
 
-    @Column(nullable = false)
+
     private LocalDate returnDate;
 
-    @Column(nullable = false)
+
     private Long returnKm;
 
     @OneToOne

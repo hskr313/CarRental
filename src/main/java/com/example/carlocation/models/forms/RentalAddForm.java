@@ -14,10 +14,6 @@ public class RentalAddForm {
 
     private Long licenseNumber;
 
-    private LocalDate returnDate;
-
-    private Long returnKm;
-
     private Long reservationId;
 
     public Rental toBLL(){
@@ -25,8 +21,6 @@ public class RentalAddForm {
         return Rental.builder()
                 .startKm(startKm)
                 .licenseNumber(licenseNumber)
-                .returnDate(returnDate)
-                .returnKm(returnKm)
                 .build();
     }
 

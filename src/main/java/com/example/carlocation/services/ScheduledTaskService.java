@@ -17,7 +17,7 @@ public class ScheduledTaskService {
         this.reservationRepository = reservationRepository;
     }
 
-    @Scheduled(cron = "0 0 1 * *")
+    @Scheduled(cron = "0 0 0 1 * *")
     public void deleteReservations(){
 
         this.reservationRepository.deleteAll(this.reservationRepository.findAll()

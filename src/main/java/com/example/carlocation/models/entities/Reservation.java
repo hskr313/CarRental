@@ -19,6 +19,7 @@ public class Reservation extends BaseEntity<Long>{
 
     @Column(nullable = false)
     private LocalDate theoricRestitution;
+
     private LocalDate restitution;
 
     @Enumerated(EnumType.ORDINAL)
@@ -27,8 +28,6 @@ public class Reservation extends BaseEntity<Long>{
     @OneToOne(cascade = CascadeType.PERSIST)
     private Reservation substitution;
 
-    @OneToOne(mappedBy = "reservation")
-    private Rental rental;
 
     @ManyToOne
     @MapsId("CustomerId")

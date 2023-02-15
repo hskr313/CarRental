@@ -6,6 +6,7 @@ import com.example.carlocation.models.dtos.rental.RentalDTO;
 import com.example.carlocation.models.entities.Rental;
 import com.example.carlocation.models.entities.Reservation;
 import com.example.carlocation.models.forms.RentalAddForm;
+import com.example.carlocation.models.forms.RentalReturnForm;
 import com.example.carlocation.services.car.CarService;
 import com.example.carlocation.services.rental.RentalService;
 import com.example.carlocation.services.reservation.ReservationService;
@@ -68,6 +69,22 @@ public class RentalController implements BaseRestController<RentalDTO, Long> {
             this.rentalService.save(rental);
         } catch (Exception exception) {
             throw new HttpPreconditionFailedException("Form is not valid", new ArrayList<>());
+        }
+
+        return ResponseEntity.ok(RentalDTO.toDTO(rental));
+    }
+
+    @PatchMapping(path = "/{id:[0-9]+}")
+    public ResponseEntity<RentalDTO> updateReturn(@PathVariable Long id, @Valid @RequestBody RentalReturnForm form){
+        Rental rental = this.rentalService.readOneByKey(id).orElseThrow(  () -> new HttpNotFoundException("Theres is no rental with id: " + id));
+
+        rental.setReturnKm(form.getReturnKm());
+        rental.setReturnDate(form.getReturnDate());
+
+        try {
+            this.rentalService.save(rental);
+        } catch (Exception exception){
+            throw  new HttpPreconditionFailedException("The modification of the lease has failed", new ArrayList<>());
         }
 
         return ResponseEntity.ok(RentalDTO.toDTO(rental));

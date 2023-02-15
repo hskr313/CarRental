@@ -30,8 +30,6 @@ public class ReservationDTO {
 
     private ReservationDTO substitution;
 
-    private RentalDTO rental;
-
     private CustomerDTO client;
 
     private RentalFormulaDTO rentalFormula;
@@ -51,7 +49,6 @@ public class ReservationDTO {
                 .restitution(reservation.getRestitution())
                 .reservStatus(reservation.getReservStatus())
                 .substitution(ReservationDTO.toDTO(reservation.getSubstitution()))
-                .rental(RentalDTO.toDTO(reservation.getRental()))
                 .client(CustomerDTO.toDTO(reservation.getCustomer()))
                 .rentalFormula(RentalFormulaDTO.toDTO(reservation.getRentalFormula()))
                 .cancellationDate(reservation.getCancellationDate())
