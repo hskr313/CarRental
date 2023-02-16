@@ -10,3 +10,5 @@ spring:
     show-sql: true
   jackson:
     date-format: dd/MM/yyyy
+jwt:
+  secret: carrental
