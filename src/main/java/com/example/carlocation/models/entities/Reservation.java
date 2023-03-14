@@ -43,7 +43,6 @@ public class Reservation extends BaseEntity<Long>{
 
     private double finDeleted;
 
-    private double indicativePrice;
 
     private LocalDate closingDate;
 
@@ -58,5 +57,12 @@ public class Reservation extends BaseEntity<Long>{
 
     public void finish(){
         this.closingDate = LocalDate.now();
+    }
+
+    public double getIndicativePrice(){
+        double maxKm = this.getRentalFormula().getMaxKm();
+        double price_km = this.getCar().getModel().getPricingClass().getPrice_km();
+
+        return maxKm * price_km ;
     }
 }

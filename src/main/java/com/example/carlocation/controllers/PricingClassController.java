@@ -35,11 +35,8 @@ public class PricingClassController implements BaseRestController<PricingClassDT
     @PostMapping(path = "")
     public ResponseEntity<PricingClassDTO> addOne(@Valid @RequestBody PricingClassAddForm form){
         PricingClass pricing = form.toBLL();
-        try {
+
             this.pricingClassService.save(pricing);
-        } catch (Exception exception) {
-            throw new HttpPreconditionFailedException(exception.getMessage(), new ArrayList<>());
-        }
 
         return ResponseEntity.ok(PricingClassDTO.toDTO(pricing));
     }

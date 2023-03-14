@@ -5,20 +5,20 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
-import lombok.Builder;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @ToString
 public class CarAddForm {
 
     @NotBlank(message = "Must be not blank")
     private int buyPrice;
-    @JsonFormat(pattern = "dd/MM/yyyy")
+
     private LocalDate buyDate;
     @PositiveOrZero
     private Long km;

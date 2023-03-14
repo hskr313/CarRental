@@ -20,7 +20,8 @@ import java.util.Collection;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = {"/car"})
+@RequestMapping(path = {"/cars"})
+@CrossOrigin(origins = "http://localhost:4200")
 public class CarController{
 
     private final CarService carService;
@@ -68,18 +69,16 @@ public class CarController{
     }
 
     @PostMapping(path = "")
-    public ResponseEntity<CarDTO> addCar( @Valid @RequestBody CarAddForm carAddForm ){
+    public ResponseEntity<CarDTO> addCar( @RequestBody CarAddForm carAddForm ){
         if (carAddForm.isRepair()) {
             carAddForm.setReturnDate(null);
         }
         Car car = carAddForm.toBLL();
         car.getModel().setPricingClass(this.pricingClassService.readOneByKey(carAddForm.getModel().getPricingClassId())
                 .orElseThrow( () -> new HttpNotFoundException("There is no pricing class with the id : " + carAddForm.getModel().getPricingClassId())));
-        try {
-            this.carService.save(car);
-        }catch (Exception exception){
-            throw new HttpPreconditionFailedException(exception.getMessage(), new ArrayList<>());
-        }
+
+
+        this.carService.save(car);
         return ResponseEntity.ok(CarDTO.toDTO(car));
     }
 
@@ -95,11 +94,9 @@ public class CarController{
         car.setSupplier(form.getSupplier());
         car.setUpdatedAt(LocalDate.now());
 
-        try {
+
             this.carService.save(car);
-        } catch (Exception exception) {
-            throw new HttpPreconditionFailedException("Car can't be updated", new ArrayList<>());
-        }
+
         return ResponseEntity.ok(CarDTO.toDTO(car));
     }
 }

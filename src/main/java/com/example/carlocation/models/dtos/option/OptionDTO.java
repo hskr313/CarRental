@@ -10,13 +10,13 @@ public class OptionDTO {
 
     private Integer id;
 
-    private String optionName;
+    private String option;
 
     public static OptionDTO toDTO(Option option){
         if ( option == null) return null;
         return OptionDTO.builder()
                 .id(option.getId())
-                .optionName(option.getOptionName())
+                .option(option.getOptionName())
                 .build();
     }
 

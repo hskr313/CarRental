@@ -37,7 +37,7 @@ public class ReservationController implements BaseRestController<ReservationDTO,
     }
 
     @Override
-    @GetMapping(path = "/{id}:[0-9]+")
+    @GetMapping(path = "/{id:[0-9]+}")
     public ResponseEntity<ReservationDTO> readOne(@PathVariable Long id) {
         Reservation reservation = this.reservationService.readOneByKey(id).orElseThrow(() -> new HttpNotFoundException("Reservation with id :(" + id + ") does not exist"));
         ReservationDTO reservationDTO = ReservationDTO.toDTO(reservation);
@@ -52,10 +52,11 @@ public class ReservationController implements BaseRestController<ReservationDTO,
     @Override
     @GetMapping(path = "")
     public ResponseEntity<Collection<ReservationDTO>> readAll() {
-        return ResponseEntity.ok(this.reservationService.readAll()
-                .peek(r -> r.setIndicativePrice(r.getRentalFormula().getMaxKm() * r.getCar().getModel().getPricingClass().getPrice_km()))
+        List<ReservationDTO> reservationDTOS = this.reservationService.readAll()
                 .map(ReservationDTO::toDTO)
-                .toList());
+                .toList();
+
+        return ResponseEntity.ok(reservationDTOS);
     }
     @PostMapping(path = "")
     public ResponseEntity<ReservationDTO> addReservation(@Valid @RequestBody ReservationAddForm form){
@@ -74,11 +75,8 @@ public class ReservationController implements BaseRestController<ReservationDTO,
                 .orElse(this.customerService.save(form.getClient().toBLL())); // TODO est ce que le customer est sauvegardé en base de donnée ?
         reservation.setCustomer(customer);
 
-        try{
-            this.reservationService.save(reservation);
-        }catch (Exception exception){
-            throw new HttpPreconditionFailedException("Form is not valid", new ArrayList<>());
-        }
+        this.reservationService.save(reservation);
+
         return ResponseEntity.ok(ReservationDTO.toDTO(reservation));
     }
 
@@ -90,23 +88,19 @@ public class ReservationController implements BaseRestController<ReservationDTO,
             case canceled -> reservationService.cancellation(reservation);
             case finished -> reservationService.ending(reservation);
         }
-        try {
-            this.reservationService.save(reservation);
-        }catch (Exception exception){
-            throw new HttpPreconditionFailedException("Status can't be changed from status A to status B", new ArrayList<>());
-        }
+
+        this.reservationService.save(reservation);
+
         return ResponseEntity.ok(ReservationDTO.toDTO(reservation));
     }
 
     @DeleteMapping(path = "/{id:[0-9]+}")
     public ResponseEntity<ReservationDTO> deleteReservation(@PathVariable Long id){
         Reservation reservation = this.reservationService.readOneByKey(id).orElseThrow(() -> new HttpNotFoundException("Reservation with id :(" + id + ") does not exist"));
-        try {
-            this.reservationService.deletion(reservation);
-            this.reservationService.save(reservation);
-        } catch (Exception exception){
-            throw new HttpPreconditionFailedException("Reservation can't be deleted", new ArrayList<>());
-        }
+
+        this.reservationService.deletion(reservation);
+        this.reservationService.save(reservation);
+
         return ResponseEntity.ok(ReservationDTO.toDTO(reservation));
     }
 

@@ -42,11 +42,7 @@ public class CustomerController implements BaseRestController<CustomerDTO, Long>
     @PostMapping(path = "")
     public ResponseEntity<CustomerDTO> addClient(@Valid @RequestBody CustomerAddForm form){
         Customer customer = form.toBLL();
-        try{
             this.customerService.save(customer);
-        }catch (Exception exception){
-            throw new HttpPreconditionFailedException(exception.getMessage(), new ArrayList<>());
-        }
 
         return ResponseEntity.ok(CustomerDTO.toDTO(customer));
     }
@@ -60,11 +56,7 @@ public class CustomerController implements BaseRestController<CustomerDTO, Long>
         customer.setLastname(form.getLastname());
         customer.setUpdatedAt(LocalDate.now());
 
-        try {
-            this.customerService.save(customer);
-        } catch (Exception exception){
-            throw new HttpPreconditionFailedException("Can't update client", new ArrayList<>());
-        }
+        this.customerService.save(customer);
 
         return ResponseEntity.ok(CustomerDTO.toDTO(customer));
     }

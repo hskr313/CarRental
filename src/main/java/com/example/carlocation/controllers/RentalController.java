@@ -103,11 +103,8 @@ public class RentalController implements BaseRestController<RentalDTO, Long> {
             rental.getFins().add(fin);
         }
 
-        try {
-            this.rentalService.save(rental);
-        } catch (Exception exception){
-            throw  new HttpPreconditionFailedException("The modification of the lease has failed", new ArrayList<>());
-        }
+        this.rentalService.save(rental);
+
 
         return ResponseEntity.ok(RentalDTO.toDTO(rental));
     }

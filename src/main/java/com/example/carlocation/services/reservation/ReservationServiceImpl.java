@@ -26,7 +26,8 @@ public class ReservationServiceImpl extends CrudServiceImpl<ReservationRepositor
     private void changeStatus(Reservation reservation, ReservationStatus newStatus) {
         if (reservation.getReservStatus().next(newStatus, reservation)) {
             this.repository.save(reservation);
-        }
+
+        }//todo exception
     }
 
     public void ending(Reservation reservation) {
@@ -39,14 +40,14 @@ public class ReservationServiceImpl extends CrudServiceImpl<ReservationRepositor
 
     public void deletion(Reservation reservation) {
         Period period = Period.between(reservation.getCancellationDate(), reservation.getRemoval());
-        if ( period.getDays() < 2 ) {
+        if ( period.getDays() < 2 ) { // todo changer le nom de la valeur en constante
             reservation.setFinDeleted(this.carRepository.getIndicativePriceByPricingAndFormula(
                     reservation.getCar().getId(),
                     reservation.getCar().getModel().getPricingClass().getId(),
                     reservation.getRentalFormula().getId()
-            ) * 0.2
+                ) * 0.2
             );
-        this.changeStatus(reservation, ReservationStatus.deleted);
+            this.changeStatus(reservation, ReservationStatus.deleted);
         } else {
             this.changeStatus(reservation, ReservationStatus.finished);
         }

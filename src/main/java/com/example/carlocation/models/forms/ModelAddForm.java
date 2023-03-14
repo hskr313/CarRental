@@ -1,14 +1,14 @@
 package com.example.carlocation.models.forms;
 
 import com.example.carlocation.models.entities.Model;
-import lombok.Builder;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @ToString
 public class ModelAddForm {
 

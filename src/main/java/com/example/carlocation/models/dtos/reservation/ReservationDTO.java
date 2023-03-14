@@ -53,6 +53,7 @@ public class ReservationDTO {
                 .rentalFormula(RentalFormulaDTO.toDTO(reservation.getRentalFormula()))
                 .cancellationDate(reservation.getCancellationDate())
                 .finDeleted(reservation.getFinDeleted())
+                .indicativePrice(reservation.getIndicativePrice())
                 .build();
     }
 

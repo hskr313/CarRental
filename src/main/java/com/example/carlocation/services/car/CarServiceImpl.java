@@ -4,6 +4,7 @@ import com.example.carlocation.models.Period;
 import com.example.carlocation.models.entities.Car;
 import com.example.carlocation.models.entities.Reservation;
 import com.example.carlocation.repositories.CarRepository;
+import com.example.carlocation.repositories.ModelRepository;
 import com.example.carlocation.repositories.ReservationRepository;
 import com.example.carlocation.services.CrudServiceImpl;
 import org.springframework.data.jpa.repository.Query;
@@ -19,9 +20,12 @@ public class CarServiceImpl extends CrudServiceImpl<CarRepository, Car, Long>
 
     private final ReservationRepository  reservationRepository;
 
-    public CarServiceImpl(CarRepository repository, ReservationRepository reservationRepository) {
+    private final ModelRepository modelRepository;
+
+    public CarServiceImpl(CarRepository repository, ReservationRepository reservationRepository, ModelRepository modelRepository) {
         super(repository);
         this.reservationRepository = reservationRepository;
+        this.modelRepository = modelRepository;
     }
 
     @Override
@@ -44,4 +48,10 @@ public class CarServiceImpl extends CrudServiceImpl<CarRepository, Car, Long>
     public double getIndicativePriceByPricingAndFormula(Long id, Long pcId, Long fId) {
         return this.repository.getIndicativePriceByPricingAndFormula(id,pcId,fId);
     }
+
+    @Override
+    public Car save(Car car) {
+        return this.repository.saveAndFlush(car);
+    }
+
 }
