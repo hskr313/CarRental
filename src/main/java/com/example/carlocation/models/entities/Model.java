@@ -2,6 +2,7 @@ package com.example.carlocation.models.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
 import java.util.List;
@@ -9,14 +10,11 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 public class Model extends RelationalEntity<Model.ModelId>{
-
-    @EmbeddedId
-    private ModelId id;
 
     @ManyToMany(targetEntity = Option.class)
     private List<Option> options;

@@ -4,7 +4,9 @@ import com.example.carlocation.exceptions.HttpNotFoundException;
 import com.example.carlocation.exceptions.HttpPreconditionFailedException;
 import com.example.carlocation.models.Period;
 import com.example.carlocation.models.dtos.car.CarDTO;
+import com.example.carlocation.models.dtos.option.OptionDTO;
 import com.example.carlocation.models.entities.Car;
+import com.example.carlocation.models.entities.Option;
 import com.example.carlocation.models.forms.CarAddForm;
 import com.example.carlocation.services.car.CarService;
 import com.example.carlocation.services.model.ModelService;
@@ -74,8 +76,11 @@ public class CarController{
             carAddForm.setReturnDate(null);
         }
         Car car = carAddForm.toBLL();
-        car.getModel().setPricingClass(this.pricingClassService.readOneByKey(carAddForm.getModel().getPricingClassId())
-                .orElseThrow( () -> new HttpNotFoundException("There is no pricing class with the id : " + carAddForm.getModel().getPricingClassId())));
+//        List<Option> options = car.getModel().getOptions().stream().map(it -> this.optionService.findByName(it.getOptionName())).toList();
+//        car.getModel().setOptions(options);
+//        car.getModel().setPricingClass(this.pricingClassService
+//                .readOneByKey(carAddForm.getModel().getPricingClassId())
+//                .orElseThrow( () -> new HttpNotFoundException("There is no pricing class with the id : " + carAddForm.getModel().getPricingClassId())));
 
 
         this.carService.save(car);
@@ -99,4 +104,5 @@ public class CarController{
 
         return ResponseEntity.ok(CarDTO.toDTO(car));
     }
+
 }
